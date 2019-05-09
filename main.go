@@ -28,6 +28,7 @@ func main() {
 			filepath.Base(os.Args[0]))
 	}
 	pairName := os.Args[1]
+	fileName := pairName + ".pem"
 
 	// Initialize a session in eu-west-2 that the SDK will use to load
 	// credentials from the shared credentials file ~/.aws/credentials.
@@ -50,19 +51,14 @@ func main() {
 	}
 
 	// lets write to a pem file and STDOUT
-	f, err := os.Create("yourfile")
+	f, err := os.Create(fileName)
 	check(err)
 	defer f.Close()
 
-	fmt.Printf("Created key pair %q %s\n%s\n",
-		*result.KeyName, *result.KeyFingerprint,
-		*result.KeyMaterial)
-
-	// fileName := os.Args[1] + .pem
-	fmt.Printf("%s\n", *result.KeyMaterial)
+	fmt.Printf("Created key pair %q %s\n",
+		*result.KeyName, *result.KeyFingerprint)
 
 	w := bufio.NewWriter(f)
-	_, err = fmt.Fprintf(w, "%v\n", *result.KeyMaterial)
 	check(err)
 	w.Flush()
 
